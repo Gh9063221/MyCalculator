@@ -20,7 +20,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self addButton];
-    [self setButton];
+    [self addMailLabel];
 }
 
 - (void)didReceiveMemoryWarning
@@ -29,9 +29,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark AddButtonAndTextView
+#pragma mark Add Button and MainLabel
 - (void)addButton {
-    UIButton *_button = [[UIButton alloc] init];
+    UIButton *_button = [UIButton new];
     //add button 1 to 9
     for (int i = 1; i <= 3; i++) {
         for (int j = 1; j <= 3; j++) {            
@@ -116,6 +116,8 @@
     [_button setTitle:@"C" forState:UIControlStateNormal];
     [_button setTag:tagC];
     [self.view addSubview:_button];
+    
+    [self setButton];
 }
 
 - (void)setButton {
@@ -137,6 +139,39 @@
     _buttonDi = (UIButton *)[self.view viewWithTag:tagDi];
     _buttonC = (UIButton *)[self.view viewWithTag:tagC];
     _buttonIv = (UIButton *)[self.view viewWithTag:tagIv];
+}
+
+- (void)addMailLabel {
+    _mainLabel = [UILabel new];
+    [_mainLabel setFrame:CGRectMake(20, 400 - (buttonHeight + gap) * 4 - gap - displayHeight, 280, displayHeight)];
+    NSLog(@"the position of mainLabel is (%d, %d)", 20, 400 - (buttonHeight + gap) * 4 - gap - displayHeight);
+    //[_mainLabel setBackgroundColor:[UIColor blackColor]];
+    [_mainLabel setText:@"here i am"];
+    [self.view addSubview:_mainLabel];
+    
+    [self addLabel];
+}
+
+- (void)addLabel {
+    _label1 = [UILabel new];
+    [_label1 setFrame:CGRectMake(20, 110, 280, 25)];
+    [_label1 setText:@"label1"];
+    [self.view addSubview:_label1];
+    
+    _label2 = [UILabel new];
+    [_label2 setFrame:CGRectMake(20, 80, 280, 25)];
+    [_label2 setText:@"labbel2"];
+    [self.view addSubview:_label2];
+    
+    _label3 = [UILabel new];
+    [_label3 setFrame:CGRectMake(20, 50, 280, 25)];
+    [_label3 setText:@"label3"];
+    [self.view addSubview:_label3];
+    
+    _label4 = [UILabel new];
+    [_label4 setFrame:CGRectMake(20, 20, 280, 25)];
+    [_label4 setText:@"label 4"];
+    [self.view addSubview:_label4];
 }
 
 @end

@@ -32,4 +32,6 @@
 #define buttonHeight 40
 #define gap 8
 
+#define displayHeight 60
+
 #endif

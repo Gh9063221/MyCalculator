@@ -30,4 +30,10 @@
 @property (retain, nonatomic)UIButton *buttonC;
 @property (retain, nonatomic)UIButton *buttonIv;
 
+@property (retain, nonatomic)UILabel *mainLabel;
+@property (retain, nonatomic)UILabel *label1;
+@property (retain, nonatomic)UILabel *label2;
+@property (retain, nonatomic)UILabel *label3;
+@property (retain, nonatomic)UILabel *label4;
+
 @end
