@@ -7,7 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "define.h"
 
 @interface ZHTViewController : UIViewController
+
+@property (retain, nonatomic)UIButton *button1;
+@property (retain, nonatomic)UIButton *button2;
+@property (retain, nonatomic)UIButton *button3;
+@property (retain, nonatomic)UIButton *button4;
+@property (retain, nonatomic)UIButton *button5;
+@property (retain, nonatomic)UIButton *button6;
+@property (retain, nonatomic)UIButton *button7;
+@property (retain, nonatomic)UIButton *button8;
+@property (retain, nonatomic)UIButton *button9;
+@property (retain, nonatomic)UIButton *button0;
+@property (retain, nonatomic)UIButton *buttonD;
+@property (retain, nonatomic)UIButton *buttonE;
+@property (retain, nonatomic)UIButton *buttonA;
+@property (retain, nonatomic)UIButton *buttonS;
+@property (retain, nonatomic)UIButton *buttonM;
+@property (retain, nonatomic)UIButton *buttonDi;
+@property (retain, nonatomic)UIButton *buttonC;
+@property (retain, nonatomic)UIButton *buttonIv;
 
 @end

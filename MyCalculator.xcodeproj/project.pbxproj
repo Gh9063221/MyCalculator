@@ -22,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0FE5EEEA17154C4C00CD9289 /* define.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		B56FF6B21714307100A63BD8 /* MyCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B56FF6B51714307100A63BD8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B56FF6B71714307100A63BD8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -86,13 +87,14 @@
 		B56FF6BB1714307100A63BD8 /* MyCalculator */ = {
 			isa = PBXGroup;
 			children = (
+				0FE5EEEA17154C4C00CD9289 /* define.h */,
 				B56FF6C41714307100A63BD8 /* ZHTAppDelegate.h */,
 				B56FF6C51714307100A63BD8 /* ZHTAppDelegate.m */,
 				B56FF6CD1714307100A63BD8 /* ZHTViewController.h */,
 				B56FF6CE1714307100A63BD8 /* ZHTViewController.m */,
-				B56FF6D01714307100A63BD8 /* ZHTViewController.xib */,
 				B56FF6D81714317E00A63BD8 /* ZHTDoCalculate.h */,
 				B56FF6D91714317E00A63BD8 /* ZHTDoCalculate.m */,
+				B56FF6D01714307100A63BD8 /* ZHTViewController.xib */,
 				B56FF6BC1714307100A63BD8 /* Supporting Files */,
 			);
 			path = MyCalculator;
@@ -270,6 +272,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyCalculator/MyCalculator-Prefix.pch";
 				INFOPLIST_FILE = "MyCalculator/MyCalculator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -281,6 +284,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyCalculator/MyCalculator-Prefix.pch";
 				INFOPLIST_FILE = "MyCalculator/MyCalculator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -305,6 +309,7 @@
 				B56FF6D71714307100A63BD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
