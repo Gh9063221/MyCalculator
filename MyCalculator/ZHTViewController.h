@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "define.h"
+#import "ZHTDoCalculate.h"
 
 @interface ZHTViewController : UIViewController
 
@@ -35,5 +36,11 @@
 @property (retain, nonatomic)UILabel *label2;
 @property (retain, nonatomic)UILabel *label3;
 @property (retain, nonatomic)UILabel *label4;
+
+@property (retain, nonatomic)ZHTDoCalculate *doCalculate;
+@property (retain, nonatomic)NSString *currentNumber;
+@property (assign, nonatomic)BOOL dotExist;
+@property (assign, nonatomic)BOOL justDone;
+@property (assign, nonatomic)int displayCount;
 
 @end

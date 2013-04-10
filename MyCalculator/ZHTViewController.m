@@ -14,6 +14,8 @@
 
 @implementation ZHTViewController
 
+#pragma mark -
+#pragma init
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -29,7 +31,254 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark Add Button and MainLabel
+#pragma mark -
+#pragma mark digiPressed
+
+- (void) pushDigit:(int) num {
+    _currentNumber = [_currentNumber stringByAppendingFormat:@"%d", num];
+    //displayLabel.text = [displayLabel.text stringByAppendingFormat:@"%d", num];
+    _mainLabel.text = [_mainLabel.text stringByAppendingFormat:@"%d", num];
+}
+
+- (void) pushDot {
+    _currentNumber = [_currentNumber stringByAppendingFormat:@"."];
+    //displayLabel.text = [displayLabel.text stringByAppendingFormat:@"."];
+    _mainLabel.text = [_mainLabel.text stringByAppendingFormat:@"."];
+}
+
+- (void) zeroPressed {
+    //当前有小数点||当前数非0，末尾加0
+    if (![_currentNumber isEqualToString:@"0"] || _dotExist == YES) {
+        [self pushDigit:0];
+    }
+}
+
+- (void) oneToNinePressed:(int) num {
+    //只有0，先删除0
+    if ([_currentNumber isEqualToString:@"0"]) {
+        //displayLabel.text = [NSString stringWithFormat:@""];
+        _mainLabel.text = [NSString stringWithFormat:@""];
+        _currentNumber = [NSString stringWithFormat:@""];
+    }
+    [self pushDigit:num];
+}
+
+- (void)dotpressed {
+    //当前没有小数点
+    if (_dotExist == NO) {
+        _dotExist = YES;
+        [self pushDot];
+    }
+}
+
+- (void) clearPressed {
+    NSLog(@"clearPressed");
+    _currentNumber = [NSString stringWithFormat:@"0"];
+    //displayLabel.text = [NSString stringWithFormat:@""];
+    _mainLabel.text = [NSString stringWithFormat:@"0"];
+    self.dotExist = NO;
+    
+    [_doCalculate setOperation:@""];
+    [_doCalculate setLeftOperand:[NSString stringWithFormat:@""]];
+    [_doCalculate setRightOperand:[NSString stringWithFormat:@""]];
+    [_doCalculate setLeftOperandEmpty:YES];
+    [_doCalculate setRightOperandEmpty:YES];
+    [_doCalculate setOperationEmpty:YES];
+}
+
+- (IBAction)digitPressed:(UIButton *)sender {
+    
+    if ([self justDone]) {
+        [self setCurrentNumber:@"0"];
+        [self setJustDone:NO];
+        //self.displayLabel.text = [NSString stringWithFormat:@"0"];
+        _mainLabel.text = [NSString stringWithFormat:@"0"];
+    }
+    NSString *digit = sender.currentTitle;
+    
+    if ([digit isEqualToString:@"0"])
+        [self zeroPressed];
+    else if ([digit isEqualToString:@"1"] ||
+             [digit isEqualToString:@"2"] ||
+             [digit isEqualToString:@"3"] ||
+             [digit isEqualToString:@"4"] ||
+             [digit isEqualToString:@"5"] ||
+             [digit isEqualToString:@"6"] ||
+             [digit isEqualToString:@"7"] ||
+             [digit isEqualToString:@"8"] ||
+             [digit isEqualToString:@"9"]) {
+        [self oneToNinePressed:[digit intValue]];
+        NSLog(@"onetonine: %@", [_doCalculate operation]);
+        NSLog(@"onetonine: %d", [_doCalculate operationEmpty]);
+    }
+    else if ([digit isEqualToString:@"."])
+        [self dotpressed];
+    else if ([digit isEqualToString:@"C"])
+        [self clearPressed];
+}
+
+#pragma mark -
+#pragma mark operationPressed
+- (void) inverPressed {
+    if (![_currentNumber isEqualToString:@""] && ![_currentNumber isEqualToString:@"0"]) {
+        NSLog(@"inversion act");
+        NSDecimalNumber *inver = [NSDecimalNumber decimalNumberWithString:_currentNumber];
+        NSDecimalNumber *tem = [NSDecimalNumber decimalNumberWithString:@"-1"];
+        inver = [inver decimalNumberByMultiplyingBy:tem];
+        _currentNumber  = [NSString stringWithString:[inver stringValue]];
+        _mainLabel.text = [NSString stringWithString:[inver stringValue]];
+        NSLog(@"%@", _currentNumber);
+    }
+}
+
+
+- (void) enterPressed {
+    //若有operation
+    if ([_doCalculate rightOperandEmpty]) {
+        
+        //set right
+        [_doCalculate setRightOperand:_currentNumber];
+        [_doCalculate setRightOperandEmpty:NO];
+        
+        //reset current number
+        [self setCurrentNumber:@""];
+        
+        //set dotExist
+        //???
+        [self setDotExist:NO];
+        
+        //run operation
+        [_doCalculate runOperation:_currentNumber];
+        
+        //display result
+//        displayLabel3.text = [NSString stringWithString:displayLabel2.text];
+//        displayLabel2.text = [NSString stringWithString:displayLabel.text];
+//        displayLabel.text = [NSString stringWithFormat:@""];
+//        displayLabel.text = [NSString stringWithString:[_doCalculate leftOperand]];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:@" "];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:[_doCalculate operation]];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:@" "];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:[_doCalculate rightOperand]];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:@" = "];
+//        displayLabel.text = [displayLabel.text stringByAppendingString:[_doCalculate.result stringValue]];
+        //displayLabel.text = [NSString stringWithString:[_doCalculate.result stringValue]];
+        _mainLabel.text = [NSString stringWithString:[_doCalculate.result stringValue]];
+        
+        //reset everything
+        [_doCalculate setOperation:@""];
+        [_doCalculate setLeftOperand:[NSString stringWithFormat:@""]];
+        [_doCalculate setRightOperand:[NSString stringWithFormat:@""]];
+        [_doCalculate setLeftOperandEmpty:YES];
+        [_doCalculate setRightOperandEmpty:YES];
+        [_doCalculate setOperationEmpty:YES];
+        
+        [self setCurrentNumber:[_doCalculate.result stringValue]];
+        
+        [self setJustDone:YES];
+    }
+}
+
+- (IBAction)operationPressed:(UIButton *)sender {
+    NSString *operation = sender.currentTitle;
+    if ([operation isEqualToString:@"="]) {
+        if (![_doCalculate leftOperandEmpty] && ![_currentNumber isEqualToString:@""]) {
+            if (![_doCalculate operationEmpty]) {
+                [self enterPressed];
+            }
+        }
+    }
+    else if ([operation isEqualToString:@"+"] ||
+             [operation isEqualToString:@"-"] ||
+             [operation isEqualToString:@"*"] ||
+             [operation isEqualToString:@"/"]) {
+        //set left and set operation
+        if ([_doCalculate leftOperandEmpty] && ![_currentNumber isEqualToString:@""]) {
+            
+            //set left
+            [_doCalculate setLeftOperand:_currentNumber];
+            [_doCalculate setLeftOperandEmpty:NO];
+            
+            //reset current number
+            _currentNumber = [NSString stringWithFormat:@""];
+            
+            //reset dotExit
+            [self setDotExist:NO];
+            
+            //add operation & display
+            if ([_doCalculate operationEmpty]) {
+                //displayLabel.text = [displayLabel.text stringByAppendingString:operation];
+                _mainLabel.text = [_mainLabel.text stringByAppendingString:operation];
+                NSLog(@"no operation");
+                [_doCalculate setOperation:operation];
+                [_doCalculate setOperationEmpty:NO];
+                
+                NSLog(@"onetonine: %@", [_doCalculate operation]);
+                NSLog(@"onetonine: %d", [_doCalculate operationEmpty]);
+            }
+            
+            if ([self justDone]) {
+                [self setJustDone:NO];
+            }
+        }
+        //change operation
+        else if (![_doCalculate leftOperandEmpty] && [_currentNumber isEqualToString:@""]) {
+            if (![_doCalculate operationEmpty]) {
+                //add operation & display
+                //int temLength = [displayLabel.text length];
+                //NSString *temString = [NSString stringWithString:[displayLabel.text substringToIndex:temLength - 1]];
+                int temLength = [_mainLabel.text length];
+                NSString *temString = [NSString stringWithString:[_mainLabel.text substringToIndex:temLength - 1]];
+                
+                temString = [temString stringByAppendingString:operation];
+                //displayLabel.text = [NSString stringWithString:temString];
+                _mainLabel.text = [NSString stringWithString:temString];
+                NSLog(@"hv operation, add operation");
+                [_doCalculate setOperation:operation];
+                [_doCalculate setOperationEmpty:NO];
+            }
+        }
+        //run operation and set naxt operation
+        else if (![_doCalculate leftOperandEmpty] && ![_currentNumber isEqualToString:@""]) {
+            if (![_doCalculate operationEmpty]) {
+                [self enterPressed];
+                [self setJustDone:NO];
+                if ([_doCalculate leftOperandEmpty] && ![_currentNumber isEqualToString:@""]) {
+                    
+                    //set left
+                    [_doCalculate setLeftOperand:_currentNumber];
+                    [_doCalculate setLeftOperandEmpty:NO];
+                    
+                    //reset current number
+                    _currentNumber = [NSString stringWithFormat:@""];
+                    
+                    //reset dotExit
+                    //???
+                    [self setDotExist:NO];
+                    
+                    //add operation & display
+                    if ([_doCalculate operationEmpty]) {
+                        //displayLabel.text = [displayLabel.text stringByAppendingString:operation];
+                        _mainLabel.text = [_mainLabel.text stringByAppendingString:operation];
+                        NSLog(@"run operation and no operation");
+                        [_doCalculate setOperation:operation];
+                        [_doCalculate setOperationEmpty:NO];
+                        
+                        NSLog(@"onetonine: %@", [_doCalculate operation]);
+                        NSLog(@"onetonine: %d", [_doCalculate operationEmpty]);
+                    }
+                }
+            }
+        }
+    }
+    else if ([operation isEqualToString:@"inver"]) {
+        [self inverPressed];
+    }
+    
+}
+
+
+#pragma mark -
+#pragma mark Add Button、 _mainLabel、 4 labels
 - (void)addButton {
     UIButton *_button = [UIButton new];
     //add button 1 to 9
@@ -144,8 +393,6 @@
 - (void)addMailLabel {
     _mainLabel = [UILabel new];
     [_mainLabel setFrame:CGRectMake(20, 400 - (buttonHeight + gap) * 4 - gap - displayHeight, 280, displayHeight)];
-    NSLog(@"the position of mainLabel is (%d, %d)", 20, 400 - (buttonHeight + gap) * 4 - gap - displayHeight);
-    //[_mainLabel setBackgroundColor:[UIColor blackColor]];
     [_mainLabel setText:@"here i am"];
     [self.view addSubview:_mainLabel];
     
