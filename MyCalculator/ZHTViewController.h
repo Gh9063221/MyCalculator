@@ -38,9 +38,13 @@
 @property (retain, nonatomic)UILabel *label4;
 
 @property (retain, nonatomic)ZHTDoCalculate *doCalculate;
-@property (retain, nonatomic)NSString *currentNumber;
+@property (retain, nonatomic)NSMutableString *currentNumber;
 @property (assign, nonatomic)BOOL dotExist;
 @property (assign, nonatomic)BOOL justDone;
 @property (assign, nonatomic)int displayCount;
+
+- (IBAction)digitPressed:(UIButton *)sender;
+- (IBAction)operationPressed:(UIButton *)sender;
+
 
 @end

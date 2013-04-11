@@ -14,17 +14,9 @@
                 afterPoint:(int)position {
     
     NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:position raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
-    //    NSDecimalNumber *ouncesDecimal;
     NSDecimalNumber *roundedOunces;
-    
-    //    ouncesDecimal = [[NSDecimalNumber alloc] initWithFloat:price];
-    
-    roundedOunces = [forRounding decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
-    
-    //    ouncesDecimal = nil;
-    
+    roundedOunces = [forRounding decimalNumberByRoundingAccordingToBehavior:roundingBehavior]; 
     return [NSString stringWithFormat:@"%@",roundedOunces];
-    
 }
 
 - (void) runOperation:(NSString *) currentNumber {

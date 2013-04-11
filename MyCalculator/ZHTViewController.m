@@ -21,8 +21,15 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    //draw everything
     [self addButton];
     [self addMailLabel];
+    
+    //init everything
+    _currentNumber = [NSMutableString stringWithString:@"0"];
+    _dotExist = NO;
+    _justDone = NO;
+    _displayCount = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -35,14 +42,12 @@
 #pragma mark digiPressed
 
 - (void) pushDigit:(int) num {
-    _currentNumber = [_currentNumber stringByAppendingFormat:@"%d", num];
-    //displayLabel.text = [displayLabel.text stringByAppendingFormat:@"%d", num];
+    [_currentNumber appendFormat:@"%d", num];
     _mainLabel.text = [_mainLabel.text stringByAppendingFormat:@"%d", num];
 }
 
 - (void) pushDot {
-    _currentNumber = [_currentNumber stringByAppendingFormat:@"."];
-    //displayLabel.text = [displayLabel.text stringByAppendingFormat:@"."];
+    [_currentNumber appendFormat:@"."];
     _mainLabel.text = [_mainLabel.text stringByAppendingFormat:@"."];
 }
 
@@ -56,9 +61,8 @@
 - (void) oneToNinePressed:(int) num {
     //只有0，先删除0
     if ([_currentNumber isEqualToString:@"0"]) {
-        //displayLabel.text = [NSString stringWithFormat:@""];
         _mainLabel.text = [NSString stringWithFormat:@""];
-        _currentNumber = [NSString stringWithFormat:@""];
+        [self setCurrentNumber:(NSMutableString *)@""];
     }
     [self pushDigit:num];
 }
@@ -72,12 +76,9 @@
 }
 
 - (void) clearPressed {
-    NSLog(@"clearPressed");
-    _currentNumber = [NSString stringWithFormat:@"0"];
-    //displayLabel.text = [NSString stringWithFormat:@""];
+    [self setCurrentNumber:(NSMutableString *)@"0"];
     _mainLabel.text = [NSString stringWithFormat:@"0"];
-    self.dotExist = NO;
-    
+    self.dotExist = NO;    
     [_doCalculate setOperation:@""];
     [_doCalculate setLeftOperand:[NSString stringWithFormat:@""]];
     [_doCalculate setRightOperand:[NSString stringWithFormat:@""]];
@@ -89,9 +90,8 @@
 - (IBAction)digitPressed:(UIButton *)sender {
     
     if ([self justDone]) {
-        [self setCurrentNumber:@"0"];
+        [self setCurrentNumber:(NSMutableString *)@"0"];
         [self setJustDone:NO];
-        //self.displayLabel.text = [NSString stringWithFormat:@"0"];
         _mainLabel.text = [NSString stringWithFormat:@"0"];
     }
     NSString *digit = sender.currentTitle;
@@ -108,8 +108,6 @@
              [digit isEqualToString:@"8"] ||
              [digit isEqualToString:@"9"]) {
         [self oneToNinePressed:[digit intValue]];
-        NSLog(@"onetonine: %@", [_doCalculate operation]);
-        NSLog(@"onetonine: %d", [_doCalculate operationEmpty]);
     }
     else if ([digit isEqualToString:@"."])
         [self dotpressed];
@@ -125,8 +123,15 @@
         NSDecimalNumber *inver = [NSDecimalNumber decimalNumberWithString:_currentNumber];
         NSDecimalNumber *tem = [NSDecimalNumber decimalNumberWithString:@"-1"];
         inver = [inver decimalNumberByMultiplyingBy:tem];
-        _currentNumber  = [NSString stringWithString:[inver stringValue]];
-        _mainLabel.text = [NSString stringWithString:[inver stringValue]];
+        
+        NSMutableString *temDisplay = [NSMutableString stringWithString:_mainLabel.text];
+        NSRange temRange = [temDisplay rangeOfString:_currentNumber];
+        [temDisplay replaceCharactersInRange:temRange
+                                  withString:[inver stringValue]];
+        _mainLabel.text = [NSString stringWithString:temDisplay];
+        
+        [self setCurrentNumber:(NSMutableString *)[inver stringValue]];
+        
         NSLog(@"%@", _currentNumber);
     }
 }
@@ -141,7 +146,7 @@
         [_doCalculate setRightOperandEmpty:NO];
         
         //reset current number
-        [self setCurrentNumber:@""];
+        [self setCurrentNumber:(NSMutableString *)@""];
         
         //set dotExist
         //???
@@ -172,7 +177,7 @@
         [_doCalculate setRightOperandEmpty:YES];
         [_doCalculate setOperationEmpty:YES];
         
-        [self setCurrentNumber:[_doCalculate.result stringValue]];
+        [self setCurrentNumber:(NSMutableString *)[_doCalculate.result stringValue]];
         
         [self setJustDone:YES];
     }
@@ -371,23 +376,58 @@
 
 - (void)setButton {
     _button1 = (UIButton *)[self.view viewWithTag:tag1];
+    [_button1 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button2 = (UIButton *)[self.view viewWithTag:tag2];
+    [_button2 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button3 = (UIButton *)[self.view viewWithTag:tag3];
+    [_button3 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button4 = (UIButton *)[self.view viewWithTag:tag4];
+    [_button4 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button5 = (UIButton *)[self.view viewWithTag:tag5];
+    [_button5 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button6 = (UIButton *)[self.view viewWithTag:tag6];
+    [_button6 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button7 = (UIButton *)[self.view viewWithTag:tag7];
+    [_button7 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button8 = (UIButton *)[self.view viewWithTag:tag8];
+    [_button8 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button9 = (UIButton *)[self.view viewWithTag:tag9];
+    [_button9 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _button0 = (UIButton *)[self.view viewWithTag:tag0];
+    [_button0 addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonD = (UIButton *)[self.view viewWithTag:tagD];
+    [_buttonD addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonE = (UIButton *)[self.view viewWithTag:tagE];
+    [_buttonE addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonA = (UIButton *)[self.view viewWithTag:tagA];
+    [_buttonA addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonS = (UIButton *)[self.view viewWithTag:tagS];
+    [_buttonS addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonM = (UIButton *)[self.view viewWithTag:tagM];
+    [_buttonM addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonDi = (UIButton *)[self.view viewWithTag:tagDi];
+    [_buttonDi addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonC = (UIButton *)[self.view viewWithTag:tagC];
+    [_buttonC addTarget:self action:@selector(digitPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     _buttonIv = (UIButton *)[self.view viewWithTag:tagIv];
+    [_buttonIv addTarget:self action:@selector(operationPressed:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)addMailLabel {
